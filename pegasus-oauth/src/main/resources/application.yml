@@ -1,0 +1,82 @@
+spring:
+  application:
+    name: ruoyi-oauth
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${SPRING_DATASOURCE_HOST:localhost}:${SPRING_DATASOURCE_PORT:3306}/ry-cloud?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:root}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+        use_sql_comments: true
+  redis:
+    host: ${SPRING_REDIS_HOST:localhost}
+    port: 6379
+    database: 1
+    password:
+  main:
+    allow-bean-definition-overriding: true
+  http:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+
+logging:
+  config: classpath:config/log/logback-spring.xml
+
+pegasus:
+  security:
+    oauth2:
+      client:
+        access-token-uri: http://localhost:8079/oauth/token
+        client-id: localhost
+        client-secret: 123456
+        grant-type: client_credentials
+        authentication-scheme: form
+  oauth:
+    default-url: http://localhost
+    login:
+      page: /login
+    logout:
+      page: /logout
+    sso:
+      # 是否启用sso
+      enabled: false
+      # sso服务端
+      server-url: http://localhost:9090/cas
+      # sso登录地址
+      server-login: ${pegasus.oauth.sso.server-url}/login
+      server-logout: ${pegasus.oauth.sso.server-url}/logout?service=${pegasus.oauth.sso.cas-service}
+      cas-service: http://localhost:8080/oauth
+      # cas客户端拦截器路径
+      cas-service-login: /login/cas
+      # cas客户端注销
+      cas-service-logout: /logout
+
+
+aj:
+  captcha:
+    jigsaw: classpath:captcha/jigsaw
+    pic-click: classpath:captcha/click
+    cache-type: local
+    type: default
+    water-mark:
+    slip-offset: 5
+    aes-status: true
+    interference-options: 2
+    font-style: 1
+    font-size: 25
+    history-data-clear-enable: false
+    req-frequency-limit-enable: false
+    req-get-lock-limit: 5
+    req-get-lock-seconds: 360
+    req-get-minute-limit: 30
+    req-check-minute-limit: 60
+    req-verify-minute-limit: 60
